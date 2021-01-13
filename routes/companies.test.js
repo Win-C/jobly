@@ -106,6 +106,57 @@ describe("GET /companies", function () {
         .set("authorization", `Bearer ${u1Token}`);
     expect(resp.statusCode).toEqual(500);
   });
+
+  test("works for filtering by company name and numEmployees (minEmployees and maxEmployees", async function () {
+    const resp = await request(app)
+        .get("/companies?name='c'&minEmployees=2")
+        .set("authorization", `Bearer ${u1Token}`);
+    expect(resp.statusCode).toEqual(200);
+    expect(resp).toEqual({
+      companies:
+          [
+            {
+              handle: "c2",
+              name: "C2",
+              description: "Desc2",
+              numEmployees: 2,
+              logoUrl: "http://c2.img",
+            },
+            {
+              handle: "c3",
+              name: "C3",
+              description: "Desc3",
+              numEmployees: 3,
+              logoUrl: "http://c3.img",
+            },
+          ],
+    });
+  });
+
+  test("works for filtering by company but no results", async function () {
+    const resp = await request(app)
+        .get("/companies?name='s'")
+        .set("authorization", `Bearer ${u1Token}`);
+    expect(resp.statusCode).toEqual(200);
+    expect(resp).toEqual({
+      companies:
+          [],
+    });
+  });
+
+  test("fails: for filtering by company where maxEmployees is negative", async function () {
+    const resp = await request(app)
+        .get("/companies?maxEmployees=-5")
+        .set("authorization", `Bearer ${u1Token}`);
+    expect(resp.statusCode).toEqual(500);
+  });
+
+  test("fails: filtering by company where minEmployees is greater than maxEmployees", async function () {
+    const resp = await request(app)
+        .get("/companies?minEmployees=10&maxEmployees='1'")
+        .set("authorization", `Bearer ${u1Token}`);
+    expect(resp.statusCode).toEqual(400);
+  });
 });
 
 /************************************** GET /companies/:handle */

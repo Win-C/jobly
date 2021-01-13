@@ -38,4 +38,43 @@ function sqlForPartialUpdate(dataToUpdate, jsToSql) {
   };
 }
 
-module.exports = { sqlForPartialUpdate };
+/* Helper function for mapping data into SQL format for WHERE clause 
+in SQL SELECT queries. Used in Company models.
+Returns WHERE clause.
+
+dataToFilter may include:
+  { name, minEmployees, maxEmployees }
+
+  
+  EXAMPLE:
+    dataToFilter = { name: 'bau', minEmployees: 500}
+    
+    jsToSql = {
+                name: "name",
+                minEmployees: "employees",**
+                maxEmployees: "employees",**
+            }
+
+    Returning: 'WHERE '
+  */
+
+ function sqlForFilter(dataToFilter, jsToSql) {
+  const keys = Object.keys(dataToFilter);
+
+  
+
+  // {name: 'bau', age: 32} => ['"first_name"=$1', '"age"=$2']
+  const cols = keys.map((colName, idx) =>
+      `"${jsToSql[colName] || colName}"=$${idx + 1}`,
+  );
+
+  return {
+    setCols: cols.join(", "),
+    values: Object.values(dataToFilter),
+  };
+}
+
+module.exports = { 
+  sqlForPartialUpdate,
+  sqlForFilter,
+ };

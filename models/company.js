@@ -1,8 +1,9 @@
 "use strict";
 
+const { search } = require("../app");
 const db = require("../db");
 const { BadRequestError, NotFoundError } = require("../expressError");
-const { sqlForPartialUpdate } = require("../helpers/sql");
+const { sqlForPartialUpdate, sqlForFilter } = require("../helpers/sql");
 
 /** Related functions for companies. */
 
@@ -48,8 +49,9 @@ class Company {
    *
    * Returns [{ handle, name, description, numEmployees, logoUrl }, ...]
    * */
-
-  static async findAll() {
+  // searchParams = { name: "c", minEmployees: 2, maxEmployees }
+  static async findAll(searchParams) {
+    const whereClause = sqlForFilter(searchParams);
     const companiesRes = await db.query(
           `SELECT handle,
                   name,
@@ -57,7 +59,9 @@ class Company {
                   num_employees AS "numEmployees",
                   logo_url AS "logoUrl"
            FROM companies
-           ORDER BY name`);
+           $1
+           ORDER BY name`,
+           [ whereClause ]);
     return companiesRes.rows;
   }
 
