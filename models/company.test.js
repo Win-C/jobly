@@ -31,7 +31,7 @@ describe("create", function () {
     expect(company).toEqual(newCompany);
 
     const result = await db.query(
-          `SELECT handle, name, description, num_employees, logo_url
+      `SELECT handle, name, description, num_employees, logo_url
            FROM companies
            WHERE handle = 'new'`);
     expect(result.rows).toEqual([
@@ -90,7 +90,7 @@ describe("findAll", function () {
   test("works: filter by companies", async function () {
     let searchParams = {
       name: "c",
-      minEmployees: 2 
+      minEmployees: 2
     };
     let companies = await Company.findAll(searchParams);
     expect(companies).toEqual([
@@ -115,9 +115,14 @@ describe("findAll", function () {
     let searchParams = {
       minEmployees: 'abc'
     };
-    let companies = await Company.findAll(searchParams);
-    console.log("companies = ", companies);
-    expect(companies).toEqual(undefined);
+
+    try {
+      let companies = await Company.findAll(searchParams);
+    } catch (err) {
+      var errorStatus = err.status;
+    }
+
+    expect(errorStatus).toEqual(400);
   });
 
   test("fails: filter by companies where maxEmployees is negative", async function () {
@@ -131,10 +136,15 @@ describe("findAll", function () {
   test("fails: filter by companies where minEmployees is greater than maxEmployees", async function () {
     let searchParams = {
       minEmployees: 100,
-      maxEmployees: 2 
+      maxEmployees: 2
     };
-    let companies = await Company.findAll(searchParams);
-    expect(companies).toEqual([]);
+    try {
+      let companies = await Company.findAll(searchParams);
+    } catch (err) {
+      var errorStatus = err.status;
+    }
+
+    expect(errorStatus).toEqual(400);
   });
 });
 
@@ -180,7 +190,7 @@ describe("update", function () {
     });
 
     const result = await db.query(
-          `SELECT handle, name, description, num_employees, logo_url
+      `SELECT handle, name, description, num_employees, logo_url
            FROM companies
            WHERE handle = 'c1'`);
     expect(result.rows).toEqual([{
@@ -207,7 +217,7 @@ describe("update", function () {
     });
 
     const result = await db.query(
-          `SELECT handle, name, description, num_employees, logo_url
+      `SELECT handle, name, description, num_employees, logo_url
            FROM companies
            WHERE handle = 'c1'`);
     expect(result.rows).toEqual([{
@@ -244,7 +254,7 @@ describe("remove", function () {
   test("works", async function () {
     await Company.remove("c1");
     const res = await db.query(
-        "SELECT handle FROM companies WHERE handle='c1'");
+      "SELECT handle FROM companies WHERE handle='c1'");
     expect(res.rows.length).toEqual(0);
   });
 

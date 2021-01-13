@@ -59,9 +59,8 @@ class Company {
                   num_employees AS "numEmployees",
                   logo_url AS "logoUrl"
            FROM companies
-           $1
-           ORDER BY name`,
-           [ whereClause ]);
+           ${whereClause}
+           ORDER BY name`);
     return companiesRes.rows;
   }
 
