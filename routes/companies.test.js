@@ -49,6 +49,8 @@ describe("POST /companies", function () {
     expect(resp.statusCode).toEqual(401);
   });
 
+  // TODO: unauth for anon
+
   test("bad request with missing data", async function () {
     const resp = await request(app)
       .post("/companies")

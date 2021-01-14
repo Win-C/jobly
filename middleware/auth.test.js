@@ -100,6 +100,8 @@ describe("ensureAdmin", function () {
     };
     ensureAdmin(req, res, next);
   });
+
+  //TODO: Write tests that would have caught the security error (e.g. isAdmin = 0, undefined, etc.)
 });
 
 /************************************** ensureCorrectUserOrAdmin */
@@ -133,5 +135,7 @@ describe("ensureCorrectUserOrAdmin", function () {
     };
     ensureCorrectUserOrAdmin(req, res, next);
   });
+
+  //TODO: Write tests that would have caught the security error (e.g. isAdmin = 0, undefined, etc.)
 
 });

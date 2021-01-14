@@ -96,28 +96,25 @@ class Company {
 
     let whereClauses = [];
     let whereValues = [];
-    let idx = 1;
-
+    
     // checks for "name" filter 
     if (name !== undefined) {
-      whereClauses.push(`name ILIKE $${idx}`);
       whereValues.push(`%${name}%`);
-      idx++;
+      whereClauses.push(`name ILIKE $${whereValues.length}`);
     }
 
     // checks for "minEmployees" filter 
     if (!isNaN(minEmployees)) {
-      whereClauses.push(`num_employees >= $${idx}`);
       whereValues.push(searchQuery.minEmployees);
-      idx++;
+      whereClauses.push(`num_employees >= $${whereValues.length}`);
     }
 
     // checks for "maxEmployees" filter 
     if (!isNaN(maxEmployees)) {
-      whereClauses.push(`num_employees <= $${idx}`);
       whereValues.push(searchQuery.maxEmployees);
-      idx++;
+      whereClauses.push(`num_employees <= $${whereValues.length}`);
     }
+    
     query = query + " WHERE " + whereClauses.join(" AND ") + " ORDER BY name";
 
     return { query, whereValues };

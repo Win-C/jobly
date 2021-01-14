@@ -60,6 +60,8 @@ router.get("/", ensureLoggedIn, ensureAdmin, async function (req, res, next) {
  * Authorization required: same user as logged in or admin
  **/
 
+// TODO: improve naming on ensureCorrectUserOrAdmin
+
 router.get("/:username", ensureLoggedIn, ensureCorrectUserOrAdmin, async function (req, res, next) {
   const user = await User.get(req.params.username);
   return res.json({ user });
