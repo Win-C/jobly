@@ -126,7 +126,7 @@ describe("findAll", function () {
       maxEmployees: 2
     };
     try {
-      let companies = await Company.findAll(searchParams);
+      await Company.findAll(searchParams);
     } catch (err) {
       var errorStatus = err.status;
     }

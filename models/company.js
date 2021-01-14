@@ -50,7 +50,7 @@ class Company {
    * Returns [{ handle, name, description, numEmployees, logoUrl }, ...]
    * */
   // searchParams = { name: "c", minEmployees: 2, maxEmployees }
-  static async findAll(searchQuery) {
+  static async findAll(searchQuery = {}) {
     const whereClause = sqlForFilter(searchQuery);
 
     const companiesRes = await db.query(

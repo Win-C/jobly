@@ -52,7 +52,7 @@ searchQuery may include:
 
 */
 
-
+// TODO: Move into class method for Company model to preserve encapsulation
 function sqlForFilter(searchQuery) {
   const { name, minEmployees, maxEmployees } = searchQuery;
 
@@ -64,24 +64,26 @@ function sqlForFilter(searchQuery) {
     throw new BadRequestError("Min number of employees cannot be greater than max");
   }
 
-  let filterConditions = [];
+  //TODO: sanitize the inputs 
+  
+  let whereClauses = [];
 
   // checks for "name" filter 
-  if (name) {
-    filterConditions.push(`name ILIKE '%${name}%'`);
+  if (name !== undefined) {
+    whereClauses.push(`name ILIKE '%${name}%'`);
   }
 
   // checks for "minEmployees" filter 
-  if (minEmployees) {
-    filterConditions.push(`num_employees >= ${minEmployees}`);
+  if (minEmployees !== undefined) {
+    whereClauses.push(`num_employees >= ${minEmployees}`);
   }
 
   // checks for "maxEmployees" filter 
-  if (maxEmployees) {
-    filterConditions.push(`num_employees <= ${maxEmployees}`);
+  if (maxEmployees !== undefined) {
+    whereClauses.push(`num_employees <= ${maxEmployees}`);
   }
 
-  return "WHERE " + filterConditions.join(" AND ");
+  return "WHERE " + whereClauses.join(" AND ");
 }
 
 module.exports = {

@@ -49,16 +49,16 @@ router.post("/", ensureLoggedIn, async function (req, res, next) {
  */
 
 router.get("/", async function (req, res, next) {
-  const searchQuery = req.query;
+  const qs = req.query;
 
-  if (searchQuery.minEmployees) {
-    searchQuery.minEmployees = +searchQuery.minEmployees;
+  if (qs.minEmployees !== undefined) {
+    qs.minEmployees = +qs.minEmployees;
   }
-  if (searchQuery.maxEmployees) {
-    searchQuery.maxEmployees = +searchQuery.maxEmployees;
+  if (qs.maxEmployees !== undefined) {
+    qs.maxEmployees = +qs.maxEmployees;
   }
 
-  const validator = jsonschema.validate(searchQuery, companiesFilterSchema);
+  const validator = jsonschema.validate(qs, companiesFilterSchema);
   if (!validator.valid) {
     const errs = validator.errors.map(e => e.stack);
     throw new BadRequestError(errs);
