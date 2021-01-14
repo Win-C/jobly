@@ -56,38 +56,39 @@ Name filter should not contain any ";" and min/maxEmployees must be integer.
 */
 
 
-function sqlForFilter(params) {
-  
+function sqlForFilter(searchQuery) {
+  const { name, minEmployees, maxEmployees } = searchQuery;
+  // console.log("params = ", params);
+
   // If no filter parameters, returns an empty string (i.e. no WHERE clause)
-  if (!params) return "";
+  if (Object.keys(searchQuery).length === 0) return "";
   
-  console.log("minEmployees", Number(params.minEmployees), "maxEmployees", Number(params.maxEmployees));
   // Makes sure that min/max num of employees is a number
-  if (isNaN(Number(params.minEmployees)) && isNaN(Number(params.maxEmployees))) {
-    console.log("ERROR RAN");
-    throw new BadRequestError("Min/max number of employees must be a number");
-  }  
+  // if ((minEmployees && isNaN(Number(minEmployees))) && 
+  //   (maxEmployees && isNaN(Number(maxEmployees)))) {
+  //   throw new BadRequestError("Min/max number of employees must be a number");
+  // }  
   
   // Makes sure that min num of employees not greater than max
-  if (params.minEmployees && params.maxEmployees && (params.minEmployees > params.maxEmployees)) {
+  if (minEmployees && maxEmployees && (minEmployees > maxEmployees)) {
     throw new BadRequestError("Min number of employees cannot be greater than max");
   }
 
   let filterConditions = [];
 
   // checks for "name" filter 
-  if (params.name) {
-    filterConditions.push(`name ILIKE '%${params.name}%'`);
+  if (name) {
+    filterConditions.push(`name ILIKE '%${name}%'`);
   }
 
   // checks for "minEmployees" filter 
-  if (params.minEmployees) {
-    filterConditions.push(`num_employees >= ${params.minEmployees}`);
+  if (minEmployees) {
+    filterConditions.push(`num_employees >= ${minEmployees}`);
   }
 
   // checks for "maxEmployees" filter 
-  if (params.maxEmployees) {
-    filterConditions.push(`num_employees <= ${params.maxEmployees}`);
+  if (maxEmployees) {
+    filterConditions.push(`num_employees <= ${maxEmployees}`);
   }
 
   return "WHERE " + filterConditions.join(" AND ");

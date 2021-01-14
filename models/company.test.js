@@ -60,7 +60,8 @@ describe("create", function () {
 
 describe("findAll", function () {
   test("works: no filter", async function () {
-    let companies = await Company.findAll();
+    const searchParams = {};
+    let companies = await Company.findAll(searchParams);
     expect(companies).toEqual([
       {
         handle: "c1",
@@ -109,20 +110,6 @@ describe("findAll", function () {
         logoUrl: "http://c3.img",
       },
     ]);
-  });
-
-  test("fails: filter by companies with string for minEmployees", async function () {
-    let searchParams = {
-      minEmployees: 'abc'
-    };
-
-    try {
-      let companies = await Company.findAll(searchParams);
-    } catch (err) {
-      var errorStatus = err.status;
-    }
-
-    expect(errorStatus).toEqual(400);
   });
 
   test("fails: filter by companies where maxEmployees is negative", async function () {
