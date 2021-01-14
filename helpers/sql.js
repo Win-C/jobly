@@ -42,32 +42,22 @@ function sqlForPartialUpdate(dataToUpdate, jsToSql) {
 in SQL SELECT queries. Used in Company models.
 Returns WHERE clause.
 
-params may include:
+searchQuery may include:
   { name, minEmployees, maxEmployees }
-
   
   EXAMPLE:
-    params = { name: 'bau', minEmployees: 500 }
+    searchQuery = { name: 'bau', minEmployees: 500 }
     
     Returning: 'WHERE name ILIKE '%bau%' AND minEmployees >= 500'
-  
-Warning: params must be validated prior to entering this function. 
-Name filter should not contain any ";" and min/maxEmployees must be integer.   
+
 */
 
 
 function sqlForFilter(searchQuery) {
   const { name, minEmployees, maxEmployees } = searchQuery;
-  // console.log("params = ", params);
 
   // If no filter parameters, returns an empty string (i.e. no WHERE clause)
   if (Object.keys(searchQuery).length === 0) return "";
-  
-  // Makes sure that min/max num of employees is a number
-  // if ((minEmployees && isNaN(Number(minEmployees))) && 
-  //   (maxEmployees && isNaN(Number(maxEmployees)))) {
-  //   throw new BadRequestError("Min/max number of employees must be a number");
-  // }  
   
   // Makes sure that min num of employees not greater than max
   if (minEmployees && maxEmployees && (minEmployees > maxEmployees)) {
