@@ -3,7 +3,7 @@
 const { search } = require("../app");
 const db = require("../db");
 const { BadRequestError, NotFoundError } = require("../expressError");
-const { sqlForPartialUpdate, sqlForFilter } = require("../helpers/sql");
+const { sqlForPartialUpdate } = require("../helpers/sql");
 
 /** Related functions for companies. */
 
@@ -49,23 +49,78 @@ class Company {
    *
    * Returns [{ handle, name, description, numEmployees, logoUrl }, ...]
    * */
-  // searchParams = { name: "c", minEmployees: 2, maxEmployees }
-  static async findAll(searchQuery = {}) {
-    const query = sqlForFilter(searchQuery);
 
-    // const companiesRes = await db.query(
-    //   `SELECT handle,
-    //               name,
-    //               description,
-    //               num_employees AS "numEmployees",
-    //               logo_url AS "logoUrl"
-    //        FROM companies 
-    //        ${whereClause}
-    //        ORDER BY name`);
+  static async findAll(searchQuery = {}) {
+    const query = this._sqlForFilter(searchQuery);
+
     const companiesRes = await db.query(query.query, query.whereValues);
-    console.log(companiesRes.rows);
     
     return companiesRes.rows;
+  }
+
+  /** Helper function for mapping data into SQL format for WHERE clause 
+   *  in SQL SELECT queries. Used in Company models.
+   *  Returns WHERE clause.
+
+      searchQuery may include:
+        { name, minEmployees, maxEmployees }
+    
+      EXAMPLE:
+        searchQuery = { name: 'bau', minEmployees: 500 }
+        
+        Returning: 'WHERE name ILIKE '%bau%' AND minEmployees >= 500'
+  */
+  static _sqlForFilter(searchQuery) {
+    let { name, minEmployees, maxEmployees } = searchQuery;
+    minEmployees = +minEmployees;
+    maxEmployees = +maxEmployees;
+    let query = `SELECT handle,
+                      name,
+                      description,
+                      num_employees AS "numEmployees",
+                      logo_url AS "logoUrl"
+                    FROM companies`;
+
+    // If no query string parameters, return unfiltered SQL
+    if (Object.keys(searchQuery).length === 0) {
+      return {
+        query: query + " ORDER BY name",
+        whereValues: []
+      };
+    }
+
+    // Makes sure that min num of employees not greater than max
+    if (minEmployees && maxEmployees && (minEmployees > maxEmployees)) {
+      throw new BadRequestError("Min number of employees cannot be greater than max");
+    }
+
+    let whereClauses = [];
+    let whereValues = [];
+    let idx = 1;
+
+    // checks for "name" filter 
+    if (name !== undefined) {
+      whereClauses.push(`name ILIKE $${idx}`);
+      whereValues.push(`%${name}%`);
+      idx++;
+    }
+
+    // checks for "minEmployees" filter 
+    if (!isNaN(minEmployees)) {
+      whereClauses.push(`num_employees >= $${idx}`);
+      whereValues.push(searchQuery.minEmployees);
+      idx++;
+    }
+
+    // checks for "maxEmployees" filter 
+    if (!isNaN(maxEmployees)) {
+      whereClauses.push(`num_employees <= $${idx}`);
+      whereValues.push(searchQuery.maxEmployees);
+      idx++;
+    }
+    query = query + " WHERE " + whereClauses.join(" AND ") + " ORDER BY name";
+
+    return { query, whereValues };
   }
 
   /** Given a company handle, return data about company.

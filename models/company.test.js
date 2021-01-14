@@ -135,6 +135,80 @@ describe("findAll", function () {
   });
 });
 
+/************************************** helper function for SQL for filter */
+
+describe("_sqlForFilter", function () {
+  test("returns WHERE clause for SQL query", function () {
+    const searchQuery = { 
+      name: 'c', 
+      minEmployees: 2
+    };
+    const query = `SELECT handle,
+                      name,
+                      description,
+                      num_employees AS "numEmployees",
+                      logo_url AS "logoUrl"
+                    FROM companies WHERE name ILIKE $1 AND num_employees >= $2 ORDER BY name`;
+
+    expect(Company._sqlForFilter(searchQuery))
+      .toEqual(
+        {
+          query: query,
+          whereValues: ['%c%', 2]
+        }
+      );
+  });
+
+  test("returns empty '' for SQL query", function () {
+    const searchQuery = {};
+
+    const query = `SELECT handle,
+                      name,
+                      description,
+                      num_employees AS "numEmployees",
+                      logo_url AS "logoUrl"
+                    FROM companies ORDER BY name`;
+
+    expect(Company._sqlForFilter(searchQuery)).toEqual(
+      {
+        query: query,
+        whereValues: []
+      }
+    );
+  });
+
+  test("returns WHERE clause with valid min and max employees", function () {
+    const searchQuery = { 
+      minEmployees: 1,
+      maxEmployees: 2
+    };
+
+    const query = `SELECT handle,
+                      name,
+                      description,
+                      num_employees AS "numEmployees",
+                      logo_url AS "logoUrl"
+                    FROM companies WHERE num_employees >= $1 AND num_employees <= $2 ORDER BY name`;
+
+    expect(Company._sqlForFilter(searchQuery))
+      .toEqual(
+        {
+          query: query,
+          whereValues: [1, 2]
+        }
+      );
+  });
+
+  test("throws error with invalid min and max employees", function () {
+    const searchQuery = { 
+      minEmployees: 3,
+      maxEmployees: 1
+    };
+
+    expect(() => Company._sqlForFilter(searchQuery)).toThrow(BadRequestError);
+  });
+});
+
 /************************************** get */
 
 describe("get", function () {
