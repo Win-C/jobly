@@ -51,17 +51,20 @@ class Company {
    * */
   // searchParams = { name: "c", minEmployees: 2, maxEmployees }
   static async findAll(searchQuery = {}) {
-    const whereClause = sqlForFilter(searchQuery);
+    const query = sqlForFilter(searchQuery);
 
-    const companiesRes = await db.query(
-      `SELECT handle,
-                  name,
-                  description,
-                  num_employees AS "numEmployees",
-                  logo_url AS "logoUrl"
-           FROM companies
-           ${whereClause}
-           ORDER BY name`);
+    // const companiesRes = await db.query(
+    //   `SELECT handle,
+    //               name,
+    //               description,
+    //               num_employees AS "numEmployees",
+    //               logo_url AS "logoUrl"
+    //        FROM companies 
+    //        ${whereClause}
+    //        ORDER BY name`);
+    const companiesRes = await db.query(query.query, query.whereValues);
+    console.log(companiesRes.rows);
+    
     return companiesRes.rows;
   }
 

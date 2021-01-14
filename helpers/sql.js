@@ -56,34 +56,55 @@ searchQuery may include:
 function sqlForFilter(searchQuery) {
   const { name, minEmployees, maxEmployees } = searchQuery;
 
+  const keys = Object.keys(searchQuery);
+
   // If no filter parameters, returns an empty string (i.e. no WHERE clause)
-  if (Object.keys(searchQuery).length === 0) return "";
-  
+  // if (Object.keys(searchQuery).length === 0) return "";
+
   // Makes sure that min num of employees not greater than max
   if (minEmployees && maxEmployees && (minEmployees > maxEmployees)) {
     throw new BadRequestError("Min number of employees cannot be greater than max");
   }
 
-  //TODO: sanitize the inputs 
-  
+  let query = `SELECT handle,
+                    name,
+                    description,
+                    num_employees AS "numEmployees",
+                    logo_url AS "logoUrl"
+                  FROM companies` 
+
   let whereClauses = [];
+  let whereValues = [];
+  let idx = 1;
 
   // checks for "name" filter 
   if (name !== undefined) {
-    whereClauses.push(`name ILIKE '%${name}%'`);
+    whereClauses.push(`name ILIKE $${idx}`);
+    whereValues.push(`%${name}%`);
+    idx++;
   }
 
   // checks for "minEmployees" filter 
   if (minEmployees !== undefined) {
-    whereClauses.push(`num_employees >= ${minEmployees}`);
+    whereClauses.push(`num_employees >= $${idx}`);
+    whereValues.push(searchQuery.minEmployees);
+    idx++;
   }
 
   // checks for "maxEmployees" filter 
   if (maxEmployees !== undefined) {
-    whereClauses.push(`num_employees <= ${maxEmployees}`);
+    whereClauses.push(`num_employees <= $${idx}`);
+    whereValues.push(searchQuery.maxEmployees);
+    idx++;
   }
 
-  return "WHERE " + whereClauses.join(" AND ");
+  if (whereClauses.length === 0) {
+    query = query + " ORDER BY name";
+  } else {
+    query = query + " WHERE " + whereClauses.join(" AND ") + " ORDER BY name";
+  }
+
+  return { query, whereValues };
 }
 
 module.exports = {
