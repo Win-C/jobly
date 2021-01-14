@@ -60,8 +60,7 @@ describe("create", function () {
 
 describe("findAll", function () {
   test("works: no filter", async function () {
-    const searchParams = {};
-    let companies = await Company.findAll(searchParams);
+    let companies = await Company.findAll();
     expect(companies).toEqual([
       {
         handle: "c1",
