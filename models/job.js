@@ -2,6 +2,7 @@
 
 const db = require("../db");
 const { BadRequestError, NotFoundError } = require("../expressError");
+const { sqlForPartialUpdate } = require("../helpers/sql");
 
 /** Related functions for companies. */
 
@@ -20,7 +21,7 @@ class Job {
       `SELECT handle
            FROM companies
            WHERE handle = $1`,
-      [ companyHandle]);
+      [companyHandle]);
 
     if (companyCheck.rows.length === 0) {
       throw new BadRequestError(`No company found for: ${companyHandle}`);
@@ -32,9 +33,9 @@ class Job {
            VALUES ($1, $2, $3, $4)
            RETURNING id, title, salary, equity, company_handle AS "companyHandle"`,
       [
-        title, 
+        title,
         salary,
-        equity, 
+        equity,
         companyHandle,
       ],
     );
@@ -45,7 +46,7 @@ class Job {
 
   /** Find all jobs.
    *
-   * Returns [{ id, title, salary, equity, company_handle }, ...]
+   * Returns [{ id, title, salary, equity, companyHandle }, ...]
    * */
 
   static async findAll() {
@@ -56,44 +57,89 @@ class Job {
     );
 
     return jobsRes.rows;
-    
+
   }
-  
+
   /** Given a job id, return data about job.
    *
-   * Returns [{ }, ...]
+   * Returns [{ id, title, salary, equity, companyHandle }, ...]
    *
    * Throws NotFoundError if not found.
    **/
 
-  // static async get() {
+  static async get(id) {
 
-  // }
+    const jobRes = await db.query(
+      `SELECT id, 
+              title,
+              salary,
+              equity,
+              company_handle AS "companyHandle"
+           FROM jobs
+           WHERE id = $1`,
+      [id]);
+
+    const job = jobRes.rows[0];
+       
+    if (!job) throw new NotFoundError(`No job: ${id}`);
+
+    return job;
+  }
 
   /** Update job data with `data`.
    *
    * This is a "partial update" --- it's fine if data doesn't contain all the
    * fields; this only changes provided ones.
    *
-   * Data can include: { }
+   * Data can include: { title, salary, equity}
    *
-   * Returns { }
+   * Returns { id, title, salary, equity, companyHandle  }
    *
    * Throws NotFoundError if not found.
    */
 
-  // static async update() {
-  
-  // }
+  static async update(id, data) {
+    const { setCols, values } = sqlForPartialUpdate(
+      data,
+      {
+        title: "title",
+        salary: "salary",
+        equity: "equity",
+      });
+    const idVarIdx = "$" + (values.length + 1);
+
+    const querySql = `UPDATE jobs 
+                      SET ${setCols} 
+                      WHERE id = ${idVarIdx} 
+                      RETURNING id, 
+                                title,
+                                salary,
+                                equity,
+                                company_handle AS "companyHandle"`;
+    const result = await db.query(querySql, [...values, id]);
+    const job = result.rows[0];
+
+    if (!job) throw new NotFoundError(`No job: ${id}`);
+
+    return job;
+  }
 
   /** Delete given job from database; returns undefined.
    *
    * Throws NotFoundError if job not found.
    **/
 
-  // static async remove() {
-  
-  // }
+  static async remove(id) {
+    const result = await db.query(
+      `DELETE
+           FROM jobs
+           WHERE id = $1
+           RETURNING id`,
+      [id]);
+    const job = result.rows[0];
+
+    if (!job) throw new NotFoundError(`No job: ${id}`);
+  }
 
 }
 
