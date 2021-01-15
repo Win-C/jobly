@@ -63,12 +63,36 @@ describe("create", function () {
 });
 
 /************************************** findAll */
-// Tests include
-// 1. works: valid job created
-// 2. fail: missing data
-// 3. fail: equity check is greater than 1 or less than 0
-// 4. fail: salary is less than 0
-// 5. fail: company_handle does not exist
+describe("findAll", function () {
+  test("works: no filter", async function () {
+
+
+    let jobs = await Job.findAll();
+    expect(jobs).toEqual([
+      {
+        id: expect.any(Number),
+        title: 'job1',
+        salary: 1,
+        equity: '0.001',
+        companyHandle: 'c1',
+      },
+      {
+        id: expect.any(Number),
+        title: 'job2',
+        salary: 2,
+        equity: '0.002',
+        companyHandle: 'c2',
+      },
+      {
+        id: expect.any(Number),
+        title: 'job3',
+        salary: 3,
+        equity: '0.003',
+        companyHandle: 'c3',
+      },
+    ]);
+  });
+});
 
 /************************************** get */
 

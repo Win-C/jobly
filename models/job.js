@@ -45,12 +45,19 @@ class Job {
 
   /** Find all jobs.
    *
-   * Returns [{  }, ...]
+   * Returns [{ id, title, salary, equity, company_handle }, ...]
    * */
 
-  // static async findAll() {
+  static async findAll() {
+    const jobsRes = await db.query(
+      `SELECT id, title, salary, equity, company_handle AS "companyHandle"
+        FROM jobs
+        ORDER BY company_handle, title`
+    );
 
-  // }
+    return jobsRes.rows;
+    
+  }
   
   /** Given a job id, return data about job.
    *
