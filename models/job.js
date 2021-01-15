@@ -62,7 +62,7 @@ class Job {
 
   /** Given a job id, return data about job.
    *
-   * Returns [{ id, title, salary, equity, companyHandle }, ...]
+   * Returns { id, title, salary, equity, companyHandle }
    *
    * Throws NotFoundError if not found.
    **/
@@ -124,8 +124,10 @@ class Job {
     return job;
   }
 
-  /** Delete given job from database; returns undefined.
+  /** Delete given job from database. 
    *
+   * Returns undefined
+   *  
    * Throws NotFoundError if job not found.
    **/
 
