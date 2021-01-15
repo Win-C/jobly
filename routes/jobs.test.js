@@ -88,6 +88,50 @@ describe("POST /jobs", function () {
 
 /************************************** GET /jobs */
 
+describe("GET /jobs", function () {
+  test("ok for anon", async function () {
+    await getJobIds();
+    const resp = await request(app).get("/jobs");
+    expect(resp.body).toEqual({
+      jobs:
+        [
+          {
+            id: expect.any(Number),
+            title: 'job1',
+            salary: 1,
+            equity: '0.001',
+            companyHandle: 'c1',
+          },
+          {
+            id: expect.any(Number),
+            title: 'job2',
+            salary: 2,
+            equity: '0.002',
+            companyHandle: 'c2',
+          },
+          {
+            id: expect.any(Number),
+            title: 'job3',
+            salary: 3,
+            equity: '0.003',
+            companyHandle: 'c3',
+          },
+        ],
+    });
+  });
+
+  test("fails: test next() handler", async function () {
+    // there's no normal failure event which will cause this route to fail ---
+    // thus making it hard to test that the error-handler works with it. This
+    // should cause an error, all right :)
+    await db.query("DROP TABLE jobs CASCADE");
+    const resp = await request(app)
+      .get("/jobs")
+      .set("authorization", `Bearer ${u1Token}`);
+    expect(resp.statusCode).toEqual(500);
+  });
+});
+
 /************************************** GET /jobs/:id */
 
 /************************************** PATCH /jobs/:id */

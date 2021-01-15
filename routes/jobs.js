@@ -38,19 +38,15 @@ router.post("/", ensureLoggedIn, ensureAdmin, async function (req, res, next) {
 });
 
 /** GET /  =>
- *   { companies: [ { handle, name, description, numEmployees, logoUrl }, ...] }
- *
- * Can filter on provided search filters:
- * - minEmployees
- * - maxEmployees
- * - nameLike (will find case-insensitive, partial matches)
+ *   { jobs: [ { id, title, salary, equity, companyHandle }, ...] }
  *
  * Authorization required: none
  */
 
-// router.get("/", async function (req, res, next) {
-
-// });
+router.get("/", async function (req, res, next) {
+  const jobs = await Job.findAll();
+  return res.json({ jobs });
+});
 
 /** GET /[handle]  =>  { company }
  *
