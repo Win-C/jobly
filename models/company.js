@@ -1,6 +1,6 @@
 "use strict";
 
-const { search } = require("../app");
+// const { search } = require("../app");
 const db = require("../db");
 const { BadRequestError, NotFoundError } = require("../expressError");
 const { sqlForPartialUpdate } = require("../helpers/sql");
