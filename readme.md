@@ -1,8 +1,10 @@
 # Jobly
 
+Jobly is a mock job board site where users can sign up and login to gain access to a list of companies and their associated job postings. A user may apply to a job posting, but is restricted from duplicate applications to a single job posting.
 
+Check out the deployed app <a href="http://hilarious-cobweb.surge.sh">here</a>.
 
-Check out the deployed app <a href="">here</a>.
+Note: the following documentation focuses on the backend. For frontend related documentation and commentary, please go <a href="https://github.com/Win-C/react-jobly">here</a> 
 
 ## Screenshots
 
@@ -12,8 +14,11 @@ TODO: TBU with application screenshots
 
 <img src="/static/images/database-er-diagram.jpg" width="750" height="250">
 
+- Note: The applications tables is a join table and has two foreign keys as a primary key. 
 - Key relationships:
-
+    - One user only has one application per job
+    - Each job may have many applications
+    - Each company may have many jobs
 
 ## Current features
 - RESTful routing
@@ -53,8 +58,6 @@ Note: See package.json file for full list and associated package versions.
 - jest *(ships with CRA)*
 - jsonwebtoken for security
 - react-router-dom for routing
-
-Note: For frontend related documentation and commentary, please go <a href="">here</a> 
 
 ## Installation
 **Backend Development Setup**
