@@ -1,6 +1,6 @@
 # Jobly
 
-Jobly is a mock job board site where users can sign up and login to gain access to a list of companies and their associated job postings. A user may apply to a job posting, but is restricted from duplicate applications to a single job posting.
+Jobly is a mock job board site where users can sign up and login. Logged in users gain access to a list of companies with search and filtering capabilities. Each company has a list of job postings that a user can view. A user may apply to a job posting, but each user is restricted from duplicate applications to a single job posting posted by a company.
 
 Check out the deployed app <a href="http://hilarious-cobweb.surge.sh">here</a>.
 
