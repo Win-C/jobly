@@ -16,9 +16,8 @@ TODO: TBU with application screenshots
 
 - Note: The applications tables is a join table and has two foreign keys as a primary key. 
 - Key relationships:
-    - Each user may have many applications
-    - Each job only has one application for each user
-    - Each company may have many jobs
+    - Each user may have many applications (one-to-many) but each job only has one application for each user (one-to-one)
+    - Each company may have many jobs (one-to-many)
 
 ## Current features
 - RESTful routing
