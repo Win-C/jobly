@@ -10,7 +10,7 @@ TODO: TBU with application screenshots
 
 **Database**
 
-<img src="/static/images/database-er-diagram.jpg" width="1000" height="250">
+<img src="/static/images/database-er-diagram.jpg" width="750" height="250">
 
 - Key relationships:
 
@@ -80,7 +80,7 @@ Note: any time you run our tests here, you will need to use the -i flag for Jest
 
 **Coverage Report**:
 
-<img src="/static/images/test-coverage-report.png" width="1000" height="250">
+<img src="/static/images/test-coverage-report.png" width="600" height="250">
 
 
 ## Deployment
