@@ -10,14 +10,14 @@ Note: the following documentation focuses on the backend. For frontend related d
 
 TODO: TBU with application screenshots
 
-**Database**
+**Database Entity Relationships**
 
-<img src="/static/images/database-er-diagram.jpg" width="750" height="250">
+<img src="/static/images/database-er-diagram.png" width="750" height="250">
 
 - Note: The applications tables is a join table and has two foreign keys as a primary key. 
 - Key relationships:
-    - One user only has one application per job
-    - Each job may have many applications
+    - Each user may have many applications
+    - Each job only has one application for each user
     - Each company may have many jobs
 
 ## Current features
