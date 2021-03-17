@@ -78,6 +78,11 @@ npm start
 
 ## Testing
 
+To run tests:
+```console
+jest -i
+```
+
 Note: any time you run our tests here, you will need to use the -i flag for Jest so that the tests run "in band" (in order, not at the same time).
 
 **Coverage Report**:

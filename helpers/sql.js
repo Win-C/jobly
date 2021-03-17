@@ -1,6 +1,6 @@
 const { BadRequestError } = require("../expressError");
 
-/* Helper function for mapping data into SQL format for SET clause 
+/* Helper function for mapping data into SQL format for SET clause
 in SQL UPDATE queries. Used in User and Company models.
 
 dataToUpate may include:
@@ -8,15 +8,16 @@ dataToUpate may include:
 
   
   EXAMPLE:
-    dataToUpdate = {firstName: 'Aliya', age: 32}
+    dataToUpdate = {firstName: 'Aliya', age: 32, ...}
     
     jsToSql = {
                 firstName: "first_name",
                 lastName: "last_name",
                 isAdmin: "is_admin",
-            }
-    
-    Returning:
+              }
+    jsToSql maps js-style data fields to database column names
+
+Returns =>
       {
         setCols: '"first_name"=$1', '"age"=$2',
         values: ['Aliya', 32],
