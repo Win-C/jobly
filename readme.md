@@ -1,6 +1,6 @@
 # Jobly
 
-Jobly is a mock job board site where users can sign up and login. Logged in users gain access to a list of companies with search and filtering capabilities. Each company has a list of job postings that a user can view. A user may apply to a job posting, but each user is restricted from duplicate applications to a single job posting posted by a company.
+Jobly is a full stack web application of a mock job board site where users can sign up and login. Logged in users gain access to a list of companies with search and filtering capabilities. Each company has a list of job postings that a user can view. A user may apply to a job posting, but each user is restricted from duplicate applications to a single job posting posted by a company.
 
 Check out the deployed backend <a href="https://winnie-jobly.herokuapp.com/">here</a>.
 
