@@ -36,7 +36,7 @@ Note: the following documentation focuses on the backend. For frontend related d
 
 ## Tech stack
 - PostgreSQL for database
-- Express / JavaScript for backend
+- Express.js/Node.js for backend
 - Create-React-App/React for frontend
 
 ## Dependencies
