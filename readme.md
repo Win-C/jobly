@@ -1,10 +1,10 @@
-# Jobly
+# Jobly (Backend)
 
 Jobly is a full stack web application of a mock job board site where users can sign up and login. Logged in users gain access to a list of companies with search and filtering capabilities. Each company has a list of job postings that a user can view. A user may apply to a job posting, but each user is restricted from duplicate applications to a single job posting posted by a company.
 
 Check out the deployed backend <a href="https://winnie-jobly.herokuapp.com/">here</a>.
 
-Note: the following documentation focuses on the backend. For frontend related documentation and commentary, please go <a href="https://github.com/Win-C/react-jobly">here</a>.
+For **frontend** related documentation and commentary, please go <a href="https://github.com/Win-C/react-jobly">here</a>.
 
 ## Screenshots
 
@@ -36,8 +36,8 @@ Note: the following documentation focuses on the backend. For frontend related d
 
 ## Tech stack
 - PostgreSQL for database
-- Express.js/Node.js for backend
-- Create-React-App/React for frontend
+- Express.js / Node.js for backend
+- React for frontend
 
 ## Dependencies
 **Backend dependencies** include:
@@ -55,13 +55,6 @@ Note: the following documentation focuses on the backend. For frontend related d
 - supertest
 
 Note: See package.json file for full list and associated package versions.
-
-**Frontend dependencies** include:
-- axios for requests
-- bootstrap for styling
-- jest *(ships with CRA)*
-- jsonwebtoken for security
-- react-router-dom for routing
 
 ## Installation
 **Backend Development Setup**
