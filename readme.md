@@ -4,7 +4,7 @@ Jobly is a mock job board site where users can sign up and login. Logged in user
 
 Check out the deployed backend <a href="https://winnie-jobly.herokuapp.com/">here</a>.
 
-Note: the following documentation focuses on the backend. For frontend related documentation and commentary, please go <a href="https://github.com/Win-C/react-jobly">here</a> 
+Note: the following documentation focuses on the backend. For frontend related documentation and commentary, please go <a href="https://github.com/Win-C/react-jobly">here</a>.
 
 ## Screenshots
 
